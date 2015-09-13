@@ -23,12 +23,13 @@ import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.plasma.private.mymediacontroller 1.0
 
-Item {
+MouseArea {
     id: expandedRepresentation
     anchors.fill: parent
 
-    Layout.minimumWidth: 400
+    Layout.minimumWidth: 250
     Layout.preferredWidth: Layout.minimumWidth
     Layout.preferredHeight: parent.height
     Layout.fillHeight: true
@@ -42,6 +43,25 @@ Item {
 
     property bool isExpanded: plasmoid.expanded
 
+    VolumeControl {
+        id: volumeControl
+    }
+
+    acceptedButtons: Qt.MidButton
+
+    onReleased: {
+        if (mouse.button == Qt.MidButton) {
+            root.action_openplayer()
+        }
+    }
+
+    onWheel: {
+         if (wheel.angleDelta.y > 0) {
+             volumeControl.volumeUp()
+         } else if (wheel.angleDelta.y < 0) {
+             volumeControl.volumeDown()
+         }
+    }
 
     Column {
         id: titleColumn
@@ -82,16 +102,7 @@ Item {
                     text: root.artist ? root.artist : ""
                 }
             }
-            /*
-            Column {
-                PlasmaComponents.Button {
-text: i18nc("Bring the window of player %1 to the front", "Open %1", mpris2Source.data[mpris2Source.current].Identity)
-          visible: !root.noPlayer && mpris2Source.data[mpris2Source.current].CanRaise
-          onClicked: root.action_openplayer()
-                }
 
-            }
-            */
             Column {
                 id: playerControls
                 Layout.fillWidth: true
