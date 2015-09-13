@@ -26,13 +26,14 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 Item {
     id: expandedRepresentation
+    anchors.fill: parent
 
-    Layout.minimumWidth: Layout.minimumHeight * 1.333
-    Layout.minimumHeight: theme.mSize(theme.defaultFont).height * 8
-    Layout.preferredWidth: Layout.minimumWidth * 1.5
-    Layout.preferredHeight: Layout.minimumHeight * 1.5
+    Layout.minimumWidth: 400
+    Layout.preferredWidth: Layout.minimumWidth
+    Layout.preferredHeight: parent.height
+    Layout.fillHeight: true
 
-    readonly property int controlSize: Math.min(height, width) / 4
+    readonly property int controlSize: Math.min(height, width)
     // Basically just needed to match the right margin to the left in systray popup
     readonly property bool constrained: plasmoid.formFactor == PlasmaCore.Types.Vertical || plasmoid.formFactor == PlasmaCore.Types.Horizontal
 
@@ -41,173 +42,99 @@ Item {
 
     property bool isExpanded: plasmoid.expanded
 
-    onIsExpandedChanged: {
-        if (isExpanded) {
-            var service = mpris2Source.serviceForSource(mpris2Source.current);
-            var operation = service.operationDescription("GetPosition");
-            service.startOperationCall(operation);
-        }
-    }
-
-    onPositionChanged: {
-        // we don't want to interrupt the user dragging the slider
-        if (!seekSlider.pressed) {
-            // we also don't want passive position updates
-            disablePositionUpdate = true
-            seekSlider.value = position
-            disablePositionUpdate = false
-        }
-    }
 
     Column {
         id: titleColumn
         width: constrained ? parent.width - units.largeSpacing : parent.width
+        height: parent.height
+        Layout.fillHeight: true
         spacing: units.smallSpacing
 
         RowLayout {
             id: titleRow
-            spacing: units.largeSpacing
+            spacing: units.smallSpacing
+            Layout.fillHeight: true
             width: parent.width
-
-            Image {
-                id: albumArt
-                source: root.albumArt
-                fillMode: Image.PreserveAspectCrop
-                Layout.preferredHeight: expandedRepresentation.height / 2
-                Layout.preferredWidth: Layout.preferredHeight
-                visible: !!root.track
-
-                PlasmaCore.IconItem {
-                    anchors.fill: parent
-                    source: "tools-rip-audio-cd" // FIXME VDG Needs a proper album art cover dummy
-                    visible: parent.status !== Image.Ready
-                }
-            }
+            height: parent.height
 
             Column {
                 Layout.fillWidth: true
-                spacing: units.smallSpacing / 2
+                Layout.fillHeight: true
+                spacing: 0
 
-                PlasmaExtras.Heading {
+                PlasmaComponents.Label {
                     id: song
                     width: parent.width
-                    level: 3
-                    opacity: 0.6
+                    opacity: 0.9
+                    height: parent.height / 2
 
                     elide: Text.ElideRight
                     text: root.track ? root.track : i18n("No media playing")
                 }
 
-                PlasmaExtras.Heading {
+                PlasmaComponents.Label {
                     id: artist
                     width: parent.width
-                    level: 4
-                    opacity: 0.4
+                    opacity: 0.7
+                    height: parent.height / 2
 
                     elide: Text.ElideRight
                     text: root.artist ? root.artist : ""
                 }
             }
-        }
+            /*
+            Column {
+                PlasmaComponents.Button {
+text: i18nc("Bring the window of player %1 to the front", "Open %1", mpris2Source.data[mpris2Source.current].Identity)
+          visible: !root.noPlayer && mpris2Source.data[mpris2Source.current].CanRaise
+          onClicked: root.action_openplayer()
+                }
 
-        PlasmaComponents.Slider {
-            id: seekSlider
-            width: parent.width
-            z: 999
-            maximumValue: currentMetadata ? currentMetadata["mpris:length"] || 0 : 0
-            value: 0
-            // if there's no "mpris:length" in teh metadata, we cannot seek, so hide it in that case
-            enabled: !root.noPlayer && root.track && currentMetadata && currentMetadata["mpris:length"] && mpris2Source.data[mpris2Source.current].CanSeek
-            opacity: enabled ? 1 : 0
-            Behavior on opacity {
-                NumberAnimation { duration: units.longDuration }
             }
+            */
+            Column {
+                id: playerControls
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                property bool enabled: !root.noPlayer && mpris2Source.data[mpris2Source.current].CanControl
+                property int controlsSize: theme.mSize(theme.defaultFont).height * 3
 
-            onValueChanged: {
-                if (!disablePositionUpdate) {
-                    // delay setting the position to avoid race conditions
-                    queuedPositionUpdate.restart()
+                //spacing: units.largeSpacing
+
+                PlasmaComponents.ToolButton {
+                    width: expandedRepresentation.controlSize
+                    height: width
+                    enabled: playerControls.enabled && mpris2Source.data[mpris2Source.current].CanGoPrevious
+                    iconSource: "media-skip-backward"
+                    onClicked: root.previous()
                 }
             }
+            Column {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
-            Timer {
-                id: seekTimer
-                interval: 1000
-                repeat: true
-                running: root.state == "playing" && plasmoid.expanded
-                onTriggered: {
-                    // some players don't continuously update the seek slider position via mpris
-                    // add one second; value in microseconds
-                    if (!seekSlider.pressed) {
-                        disablePositionUpdate = true
-                        seekSlider.value += 1000000
-                        disablePositionUpdate = false
-                    }
+                PlasmaComponents.ToolButton {
+                    width: expandedRepresentation.controlSize
+                    height: width
+                    enabled: playerControls.enabled
+                    iconSource: root.state == "playing" ? "media-playback-pause" : "media-playback-start"
+                    onClicked: root.playPause()
+                }
+            }
+            Column {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                PlasmaComponents.ToolButton {
+                    width: expandedRepresentation.controlSize
+                    height: width
+                    enabled: playerControls.enabled && mpris2Source.data[mpris2Source.current].CanGoNext
+                    iconSource: "media-skip-forward"
+                    onClicked: root.next()
                 }
             }
         }
+
     }
 
-    Timer {
-        id: queuedPositionUpdate
-        interval: 100
-        onTriggered: {
-            var service = mpris2Source.serviceForSource(mpris2Source.current)
-            var operation = service.operationDescription("SetPosition")
-            operation.microseconds = seekSlider.value
-            service.startOperationCall(operation)
-        }
-    }
-
-    PlasmaComponents.Button {
-        anchors {
-            right: titleColumn.right
-            bottom: titleColumn.bottom
-            bottomMargin: seekSlider.height // Cannot anchor around in a column/row, and being lazy
-        }
-        text: i18nc("Bring the window of player %1 to the front", "Open %1", mpris2Source.data[mpris2Source.current].Identity)
-        visible: !root.noPlayer && mpris2Source.data[mpris2Source.current].CanRaise
-        onClicked: root.action_openplayer()
-    }
-
-    Item {
-        anchors.bottom: parent.bottom
-        width: constrained ? parent.width - units.largeSpacing : parent.width
-        height: playerControls.height
-
-        Row {
-            id: playerControls
-            property bool enabled: !root.noPlayer && mpris2Source.data[mpris2Source.current].CanControl
-            property int controlsSize: theme.mSize(theme.defaultFont).height * 3
-
-            anchors.horizontalCenter: parent.horizontalCenter
-            spacing: units.largeSpacing
-
-            PlasmaComponents.ToolButton {
-                anchors.verticalCenter: parent.verticalCenter
-                width: expandedRepresentation.controlSize
-                height: width
-                enabled: playerControls.enabled && mpris2Source.data[mpris2Source.current].CanGoPrevious
-                iconSource: "media-skip-backward"
-                onClicked: root.previous()
-            }
-
-            PlasmaComponents.ToolButton {
-                width: expandedRepresentation.controlSize * 1.5
-                height: width
-                enabled: playerControls.enabled
-                iconSource: root.state == "playing" ? "media-playback-pause" : "media-playback-start"
-                onClicked: root.playPause()
-            }
-
-            PlasmaComponents.ToolButton {
-                anchors.verticalCenter: parent.verticalCenter
-                width: expandedRepresentation.controlSize
-                height: width
-                enabled: playerControls.enabled && mpris2Source.data[mpris2Source.current].CanGoNext
-                iconSource: "media-skip-forward"
-                onClicked: root.next()
-            }
-        }
-    }
 }
