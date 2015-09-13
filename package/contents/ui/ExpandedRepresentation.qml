@@ -23,13 +23,12 @@ import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
-import org.kde.plasma.private.mymediacontroller 1.0
 
 MouseArea {
     id: expandedRepresentation
     anchors.fill: parent
 
-    Layout.minimumWidth: 250
+    Layout.minimumWidth: 220
     Layout.preferredWidth: Layout.minimumWidth
     Layout.preferredHeight: parent.height
     Layout.fillHeight: true
@@ -42,10 +41,6 @@ MouseArea {
     property bool disablePositionUpdate: false
 
     property bool isExpanded: plasmoid.expanded
-
-    VolumeControl {
-        id: volumeControl
-    }
 
     acceptedButtons: Qt.MidButton
 
@@ -64,11 +59,12 @@ MouseArea {
     }
 
     Column {
-        id: titleColumn
+        id: playbackItems
         width: constrained ? parent.width - units.largeSpacing : parent.width
         height: parent.height
         Layout.fillHeight: true
         spacing: 0
+        visible: !root.noPlayer
 
         RowLayout {
             id: titleRow
