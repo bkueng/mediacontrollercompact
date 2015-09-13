@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright 2013 Sebastian Kügler <sebas@kde.org>                       *
  *   Copyright 2014 Kai Uwe Broulik <kde@privat.broulik.de>                *
+ *   Copyright 2015 Beat Küng <beat-kueng@gmx.net>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -24,7 +25,7 @@ import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
-import org.kde.plasma.private.mymediacontroller 1.0
+import org.kde.plasma.private.mediacontrollercompact 1.0
 
 Item {
     id: root

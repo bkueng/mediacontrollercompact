@@ -1,2 +1,2 @@
-module org.kde.plasma.private.mymediacontroller
-plugin mymediacontrollerplugin
+module org.kde.plasma.private.mediacontrollercompact
+plugin mediacontrollercompactplugin

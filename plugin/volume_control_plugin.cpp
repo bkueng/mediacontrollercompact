@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2014  Martin Klapetek <mklapetek@kde.org>
+    Copyright (C) 2015  Beat Küng <beat-kueng@gmx.net>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -23,7 +24,7 @@
 
 void VolumeControlPlugin::registerTypes(const char *uri)
 {
-    Q_ASSERT(uri == QLatin1String("org.kde.plasma.private.mymediacontroller"));
+    Q_ASSERT(uri == QLatin1String("org.kde.plasma.private.mediacontrollercompact"));
 
     qmlRegisterType<VolumeControl>(uri, 1, 0, "VolumeControl");
 }

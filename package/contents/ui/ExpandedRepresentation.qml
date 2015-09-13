@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright 2013 Sebastian Kügler <sebas@kde.org>                       *
  *   Copyright 2014 Kai Uwe Broulik <kde@privat.broulik.de>                *
+ *   Copyright 2015 Beat Küng <beat-kueng@gmx.net>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *

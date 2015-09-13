@@ -17,29 +17,29 @@ find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Widgets Quick Quic
 
 set(CMAKE_AUTOMOC ON)
 
-set(mymediacontrollerplugin_SRCS
+set(mediacontrollercompactplugin_SRCS
     plugin/volume_control.cpp
     plugin/volume_control_plugin.cpp
     )
 
 
-add_library(mymediacontrollerplugin SHARED ${mymediacontrollerplugin_SRCS})
-target_link_libraries(mymediacontrollerplugin Qt5::Core
+add_library(mediacontrollercompactplugin SHARED ${mediacontrollercompactplugin_SRCS})
+target_link_libraries(mediacontrollercompactplugin Qt5::Core
                                     Qt5::Qml
                                     KF5::CoreAddons)
 
-install(TARGETS mymediacontrollerplugin DESTINATION
-	${KDE_INSTALL_QMLDIR}/org/kde/plasma/private/mymediacontroller)
+install(TARGETS mediacontrollercompactplugin DESTINATION
+	${KDE_INSTALL_QMLDIR}/org/kde/plasma/private/mediacontrollercompact)
 
 install(FILES plugin/qmldir DESTINATION
-	${KDE_INSTALL_QMLDIR}/org/kde/plasma/private/mymediacontroller)
+	${KDE_INSTALL_QMLDIR}/org/kde/plasma/private/mediacontrollercompact)
 
 # Add installatation target ("make install").
-plasma_install_package(package org.kde.plasma.mymediacontroller)
+plasma_install_package(package org.kde.plasma.mediacontrollercompact)
 # run it:
 # make install
 # export QML2_IMPORT_PATH=/usr/local/lib64/qml
-# plasmawindowed org.kde.plasma.mymediacontroller
+# plasmawindowed org.kde.plasma.mediacontrollercompact
 # TODO: install to system location? (/usr/lib64/qt5/qml)
 
 # TODO: cleanup /usr/local ...
