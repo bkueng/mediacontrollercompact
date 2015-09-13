@@ -68,7 +68,7 @@ MouseArea {
         width: constrained ? parent.width - units.largeSpacing : parent.width
         height: parent.height
         Layout.fillHeight: true
-        spacing: units.smallSpacing
+        spacing: 0
 
         RowLayout {
             id: titleRow
@@ -105,43 +105,50 @@ MouseArea {
 
             Column {
                 id: playerControls
-                Layout.fillWidth: true
-                Layout.fillHeight: true
                 property bool enabled: !root.noPlayer && mpris2Source.data[mpris2Source.current].CanControl
-                property int controlsSize: theme.mSize(theme.defaultFont).height * 3
 
-                //spacing: units.largeSpacing
-
-                PlasmaComponents.ToolButton {
-                    width: expandedRepresentation.controlSize
-                    height: width
-                    enabled: playerControls.enabled && mpris2Source.data[mpris2Source.current].CanGoPrevious
-                    iconSource: "media-skip-backward"
-                    onClicked: root.previous()
-                }
-            }
-            Column {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                PlasmaComponents.ToolButton {
-                    width: expandedRepresentation.controlSize
+                PlasmaCore.IconItem {
+                    source: "media-skip-backward"
+                    width: expandedRepresentation.controlSize * 0.7
                     height: width
                     enabled: playerControls.enabled
-                    iconSource: root.state == "playing" ? "media-playback-pause" : "media-playback-start"
-                    onClicked: root.playPause()
+                    MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.LeftButton
+                        onClicked: {
+                            root.previous()
+                        }
+                    }
                 }
             }
             Column {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                PlasmaComponents.ToolButton {
-                    width: expandedRepresentation.controlSize
+                PlasmaCore.IconItem {
+                    source: root.state == "playing" ? "media-playback-pause" : "media-playback-start"
+                    width: expandedRepresentation.controlSize * 0.7
                     height: width
-                    enabled: playerControls.enabled && mpris2Source.data[mpris2Source.current].CanGoNext
-                    iconSource: "media-skip-forward"
-                    onClicked: root.next()
+                    enabled: playerControls.enabled
+                    MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.LeftButton
+                        onClicked: {
+                            root.playPause()
+                        }
+                    }
+                }
+            }
+            Column {
+                PlasmaCore.IconItem {
+                    source: "media-skip-forward"
+                    width: expandedRepresentation.controlSize * 0.7
+                    height: width
+                    enabled: playerControls.enabled
+                    MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.LeftButton
+                        onClicked: {
+                            root.next()
+                        }
+                    }
                 }
             }
         }
