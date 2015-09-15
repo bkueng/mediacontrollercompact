@@ -153,7 +153,7 @@ MouseArea {
                         anchors.fill: parent
                         acceptedButtons: Qt.LeftButton
                         onClicked: {
-                            //TODO: run player
+                            root.exec("rhythmbox&")
                         }
                     }
                 }
