@@ -126,10 +126,10 @@ Item {
         serviceOp(mpris2Source.current, "Raise");
     }
     function volumeUp() {
-        exec("volume.sh up")
+        exec(plasmoid.configuration.volumeUpCmd)
     }
     function volumeDown() {
-        exec("volume.sh down")
+        exec(plasmoid.configuration.volumeDownCmd)
     }
 
     function playPause() {

@@ -29,7 +29,7 @@ MouseArea {
     id: expandedRepresentation
     anchors.fill: parent
 
-    Layout.minimumWidth: root.noPlayer ? height : 220
+    Layout.minimumWidth: root.noPlayer ? height : plasmoid.configuration.widgetWidth
     Layout.preferredWidth: Layout.minimumWidth
     Layout.fillHeight: true
 
@@ -153,7 +153,7 @@ MouseArea {
                         anchors.fill: parent
                         acceptedButtons: Qt.LeftButton
                         onClicked: {
-                            root.exec("rhythmbox&")
+                            root.exec(plasmoid.configuration.startPlayerCmd+"&")
                         }
                     }
                 }
