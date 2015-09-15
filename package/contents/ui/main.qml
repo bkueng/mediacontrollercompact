@@ -25,14 +25,9 @@ import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
-import org.kde.plasma.private.mediacontrollercompact 1.0
 
 Item {
     id: root
-
-    VolumeControl {
-        id: volumeControl
-    }
 
     property var currentMetadata: mpris2Source.data[mpris2Source.current] ? mpris2Source.data[mpris2Source.current].Metadata : undefined
     property string track: {
@@ -92,6 +87,24 @@ Item {
     Plasmoid.compactRepresentation: ExpandedRepresentation {}
 
     PlasmaCore.DataSource {
+        id: executeSource
+        engine: "executable"
+        connectedSources: []
+
+        onNewData: {
+            //we get new data when the process finished, so we can remove it
+            disconnectSource(sourceName)
+        }
+    }
+    function exec(cmd) {
+        //Note: we assume that 'cmd' is executed quickly so that a previous call
+        //with the same 'cmd' has already finished (otherwise no new cmd will be
+        //added because it is already in the list)
+        executeSource.connectSource(cmd)
+    }
+
+
+    PlasmaCore.DataSource {
         id: mpris2Source
         engine: "mpris2"
         connectedSources: current
@@ -111,6 +124,12 @@ Item {
 
     function action_openplayer() {
         serviceOp(mpris2Source.current, "Raise");
+    }
+    function volumeUp() {
+        exec("volume.sh up")
+    }
+    function volumeDown() {
+        exec("volume.sh down")
     }
 
     function playPause() {

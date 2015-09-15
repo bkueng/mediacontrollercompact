@@ -48,9 +48,9 @@ MouseArea {
 
     onWheel: {
          if (wheel.angleDelta.y > 0) {
-             volumeControl.volumeUp()
+             root.volumeUp()
          } else if (wheel.angleDelta.y < 0) {
-             volumeControl.volumeDown()
+             root.volumeDown()
          }
     }
 
