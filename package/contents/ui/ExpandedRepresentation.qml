@@ -29,19 +29,14 @@ MouseArea {
     id: expandedRepresentation
     anchors.fill: parent
 
-    Layout.minimumWidth: 220
+    Layout.minimumWidth: root.noPlayer ? height : 220
     Layout.preferredWidth: Layout.minimumWidth
-    Layout.preferredHeight: parent.height
     Layout.fillHeight: true
 
-    readonly property int controlSize: Math.min(height, width)
-    // Basically just needed to match the right margin to the left in systray popup
-    readonly property bool constrained: plasmoid.formFactor == PlasmaCore.Types.Vertical || plasmoid.formFactor == PlasmaCore.Types.Horizontal
-
-    property int position: mpris2Source.data[mpris2Source.current].Position
-    property bool disablePositionUpdate: false
+    readonly property int controlSize: height
 
     property bool isExpanded: plasmoid.expanded
+    property var iconWidth: expandedRepresentation.controlSize * 0.8
 
     acceptedButtons: Qt.MidButton
 
@@ -61,23 +56,20 @@ MouseArea {
 
     Column {
         id: playbackItems
-        width: constrained ? parent.width - units.largeSpacing : parent.width
+        width: parent.width
         height: parent.height
         Layout.fillHeight: true
+        Layout.fillWidth: true
         spacing: 0
-        visible: !root.noPlayer
 
         RowLayout {
-            id: titleRow
-            spacing: units.smallSpacing
-            Layout.fillHeight: true
             width: parent.width
             height: parent.height
 
             Column {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                spacing: 0
+                visible: !root.noPlayer
 
                 PlasmaComponents.Label {
                     id: song
@@ -103,10 +95,11 @@ MouseArea {
             Column {
                 id: playerControls
                 property bool enabled: !root.noPlayer && mpris2Source.data[mpris2Source.current].CanControl
+                visible: !root.noPlayer
 
                 PlasmaCore.IconItem {
                     source: "media-skip-backward"
-                    width: expandedRepresentation.controlSize * 0.7
+                    width: expandedRepresentation.iconWidth
                     height: width
                     enabled: playerControls.enabled
                     MouseArea {
@@ -119,9 +112,10 @@ MouseArea {
                 }
             }
             Column {
+                visible: !root.noPlayer
                 PlasmaCore.IconItem {
                     source: root.state == "playing" ? "media-playback-pause" : "media-playback-start"
-                    width: expandedRepresentation.controlSize * 0.7
+                    width: expandedRepresentation.iconWidth
                     height: width
                     enabled: playerControls.enabled
                     MouseArea {
@@ -134,9 +128,10 @@ MouseArea {
                 }
             }
             Column {
+                visible: !root.noPlayer
                 PlasmaCore.IconItem {
                     source: "media-skip-forward"
-                    width: expandedRepresentation.controlSize * 0.7
+                    width: expandedRepresentation.iconWidth
                     height: width
                     enabled: playerControls.enabled
                     MouseArea {
@@ -148,8 +143,22 @@ MouseArea {
                     }
                 }
             }
+            Column {
+                visible: root.noPlayer
+                PlasmaCore.IconItem {
+                    source: "media-playback-start"
+                    width: expandedRepresentation.iconWidth
+                    height: width
+                    MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.LeftButton
+                        onClicked: {
+                            //TODO: run player
+                        }
+                    }
+                }
+            }
         }
-
     }
 
 }

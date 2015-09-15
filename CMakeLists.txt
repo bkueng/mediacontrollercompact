@@ -36,10 +36,3 @@ install(FILES plugin/qmldir DESTINATION
 
 # Add installatation target ("make install").
 plasma_install_package(package org.kde.plasma.mediacontrollercompact)
-# run it:
-# make install
-# export QML2_IMPORT_PATH=/usr/local/lib64/qml
-# plasmawindowed org.kde.plasma.mediacontrollercompact
-# TODO: install to system location? (/usr/lib64/qt5/qml)
-
-# TODO: cleanup /usr/local ...
