@@ -75,7 +75,7 @@ Item {
                     Layout.fillHeight: false
 
                     Label {
-                        text: i18n("Increase volume command:")
+                        text: i18n("Increase volume (mouse wheel):")
                     }
 
                     TextField {
@@ -86,7 +86,7 @@ Item {
                     Layout.fillHeight: false
 
                     Label {
-                        text: i18n("Decrease volume command:")
+                        text: i18n("Decrease volume (mouse wheel):")
                     }
 
                     TextField {
