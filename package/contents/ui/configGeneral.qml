@@ -28,7 +28,7 @@ Item {
     
     width: childrenRect.width
     height: childrenRect.height
-    implicitWidth: mainColumn.implicitWidth
+    implicitWidth: pageColumn.implicitWidth
     implicitHeight: pageColumn.implicitHeight
 
     property alias cfg_widgetWidth: widgetWidth.value
@@ -37,6 +37,7 @@ Item {
     property alias cfg_startPlayerCmd: startPlayerCmd.text
 
     ColumnLayout {
+        id: pageColumn
         GroupBox {
             Layout.fillWidth: true
 
