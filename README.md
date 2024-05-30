@@ -6,8 +6,10 @@ original Media Controller Plasmoid, but made compact so it fits into a panel.
 See https://www.opendesktop.org/p/998887
 
 #### Build & Install ####
-`$ mkdir build; cd build`  
-`$ cmake ..`  
-`$ make`  
-`$ sudo make install`  
+```shell
+mkdir build; cd build
+cmake ..
+make
+sudo make install
+```
 

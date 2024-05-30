@@ -1,0 +1,26 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "beat-kueng@gmx.net",
+                "Name": "Beat Küng"
+            }
+        ],
+        "Category": "Multimedia",
+        "Description": "Media Player Controls for Panel",
+        "EnabledByDefault": true,
+        "Icon": "applications-multimedia",
+        "Id": "org.kde.plasma.mediacontrollercompact",
+        "License": "GPL",
+        "Name": "Media Player Compact",
+        "Version": "1.0",
+        "Website": "http://plasma.kde.org/"
+    },
+    "X-Plasma-DBusActivationService": "org.mpris.MediaPlayer2.*",
+    "X-Plasma-NotificationArea": "false",
+    "X-Plasma-Provides": [
+        "org.kde.plasma.multimediacontrolscompact"
+    ],
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "KPackageStructure": "Plasma/Applet"
+}

@@ -19,94 +19,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 1.0
-import QtQuick.Layouts 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
 
-Item {
-    id: generalPage
-    
-    width: childrenRect.width
-    height: childrenRect.height
-    implicitWidth: pageColumn.implicitWidth
-    implicitHeight: pageColumn.implicitHeight
+Kirigami.FormLayout {
+    id: page
 
-    property alias cfg_widgetWidth: widgetWidth.value
+    property alias cfg_widgetWidth: widgetWidth.text
     property alias cfg_volumeUpCmd: volumeUpCmd.text
     property alias cfg_volumeDownCmd: volumeDownCmd.text
     property alias cfg_startPlayerCmd: startPlayerCmd.text
 
-    ColumnLayout {
-        id: pageColumn
-        GroupBox {
-            Layout.fillWidth: true
+    TextField {
+        id: widgetWidth
+        Kirigami.FormData.label: i18n("Widget width:")
+        placeholderText: i18n("")
+        validator: IntValidator {bottom: 100; top: 2000}
+    }
 
-            title: i18n("Size")
-            flat: true
-
-            ColumnLayout {
-                Layout.fillWidth: true
-
-                RowLayout {
-                    Layout.fillHeight: false
-
-                    Label {
-                        text: i18n("Widget width:")
-                    }
-
-                    SpinBox {
-                        id: widgetWidth
-                        minimumValue: 100
-                        maximumValue: 2000
-                    }
-                }
-            }
-        }
-
-        GroupBox {
-            Layout.fillWidth: true
-
-            title: i18n("Commands")
-            flat: true
-
-            ColumnLayout {
-                Layout.fillWidth: true
-
-                RowLayout {
-                    Layout.fillHeight: false
-
-                    Label {
-                        text: i18n("Increase volume (mouse wheel):")
-                    }
-
-                    TextField {
-                        id: volumeUpCmd
-                    }
-                }
-                RowLayout {
-                    Layout.fillHeight: false
-
-                    Label {
-                        text: i18n("Decrease volume (mouse wheel):")
-                    }
-
-                    TextField {
-                        id: volumeDownCmd
-                    }
-                }
-                RowLayout {
-                    Layout.fillHeight: false
-
-                    Label {
-                        text: i18n("Start player:")
-                    }
-
-                    TextField {
-                        id: startPlayerCmd
-                    }
-                }
-            }
-
-        }
+    TextField {
+        id: volumeUpCmd
+        Kirigami.FormData.label: i18n("Increase volume (mouse wheel):")
+        placeholderText: i18n("")
+    }
+    TextField {
+        id: volumeDownCmd
+        Kirigami.FormData.label: i18n("Decrease volume (mouse wheel):")
+        placeholderText: i18n("")
+    }
+    TextField {
+        id: startPlayerCmd
+        Kirigami.FormData.label: i18n("Start player:")
+        placeholderText: i18n("")
     }
 }

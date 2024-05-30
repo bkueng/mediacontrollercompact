@@ -21,9 +21,9 @@
 
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.kirigami as Kirigami
+import org.kde.plasma.components as PlasmaComponents
+import org.kde.plasma.extras as PlasmaExtras
 
 MouseArea {
     id: expandedRepresentation
@@ -35,18 +35,17 @@ MouseArea {
 
     readonly property int controlSize: height
 
-    property bool isExpanded: plasmoid.expanded
     property var iconWidth: expandedRepresentation.controlSize * 0.8
 
-    acceptedButtons: Qt.MidButton
+    acceptedButtons: Qt.MiddleButton
 
     onReleased: {
-        if (mouse.button == Qt.MidButton) {
+        if (mouse.button == Qt.MiddleButton) {
             root.action_openplayer()
         }
     }
 
-    onWheel: {
+    onWheel: function(wheel) {
          if (wheel.angleDelta.y > 0) {
              root.volumeUp()
          } else if (wheel.angleDelta.y < 0) {
@@ -72,32 +71,24 @@ MouseArea {
                 visible: !root.noPlayer
 
                 PlasmaComponents.Label {
-                    id: song
+                    id: playing
                     width: parent.width
                     opacity: 0.9
-                    height: parent.height / 2
-
-                    elide: Text.ElideRight
-                    text: root.track ? root.track : i18n("No media playing")
-                }
-
-                PlasmaComponents.Label {
-                    id: artist
-                    width: parent.width
-                    opacity: 0.7
-                    height: parent.height / 2
-
-                    elide: Text.ElideRight
-                    text: root.artist ? root.artist : ""
+                    height: parent.height
+                    font.pixelSize: height / 2 * 0.95
+                    lineHeight: 0.8
+                    verticalAlignment: Text.AlignVCenter
+                    clip: true
+                    text: root.track ? (root.artist + "\n" + root.track) : i18n("No media playing")
                 }
             }
 
             Column {
                 id: playerControls
-                property bool enabled: !root.noPlayer && mpris2Source.data[mpris2Source.current].CanControl
+                property bool enabled: !root.noPlayer && root.canControl
                 visible: !root.noPlayer
 
-                PlasmaCore.IconItem {
+                Kirigami.Icon {
                     source: "media-skip-backward"
                     width: expandedRepresentation.iconWidth
                     height: width
@@ -113,7 +104,7 @@ MouseArea {
             }
             Column {
                 visible: !root.noPlayer
-                PlasmaCore.IconItem {
+                Kirigami.Icon {
                     source: root.state == "playing" ? "media-playback-pause" : "media-playback-start"
                     width: expandedRepresentation.iconWidth
                     height: width
@@ -129,7 +120,7 @@ MouseArea {
             }
             Column {
                 visible: !root.noPlayer
-                PlasmaCore.IconItem {
+                Kirigami.Icon {
                     source: "media-skip-forward"
                     width: expandedRepresentation.iconWidth
                     height: width
@@ -145,7 +136,7 @@ MouseArea {
             }
             Column {
                 visible: root.noPlayer
-                PlasmaCore.IconItem {
+                Kirigami.Icon {
                     source: "media-playback-start"
                     width: expandedRepresentation.iconWidth
                     height: width
