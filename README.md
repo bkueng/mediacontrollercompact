@@ -5,11 +5,18 @@ original Media Controller Plasmoid, but made compact so it fits into a panel.
 
 See https://www.opendesktop.org/p/998887
 
-#### Build & Install ####
+#### Requirements ####
+- KDE Plasma 6.0 or later
+- Qt 6.4.0 or later
+- KDE Frameworks 6
+
+#### Install ####
+
 ```shell
-mkdir build; cd build
-cmake ..
-make
-sudo make install
+./install_local.sh
 ```
 
+After installation, you may need to restart Plasma:
+```shell
+systemctl --user restart plasma-plasmashell
+```
